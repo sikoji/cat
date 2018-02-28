@@ -12,6 +12,7 @@ $config['editor_style']		= "replace";	//pilihannya "inline" atau "replace";
 $config['nama_aplikasi']	= "CAT - Computer Assisted Test";
 $config['versi']			= "2.0";
 $config['tgl']				= "27012017";
+$config['tampil_nilai']		= TRUE; // jika siswa boleh melihat hasil ujian, isikan TRUE, jika tidak FALSE, default TRUE
 
 
 
