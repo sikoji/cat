@@ -1523,8 +1523,14 @@ class Adm extends CI_Controller {
 		if (empty($q_nilai)) {
 			redirect('adm/ikut_ujian/_/'.$uri3);
 		} else {
+			
 			$a['p'] = "v_selesai_ujian";
-			$a['data'] = "<div class='alert alert-danger'>Anda telah selesai mengikuti ujian ini pada : <strong style='font-size: 16px'>".tjs($q_nilai->tgl_selesai, "l")."</strong>, dan mendapatkan nilai : <strong style='font-size: 16px'>".$q_nilai->nilai."</strong></div>";
+			
+			if ($this->config->item('tampil_nilai')) {
+				$a['data'] = "<div class='alert alert-danger'>Anda telah selesai mengikuti ujian ini pada : <strong style='font-size: 16px'>".tjs($q_nilai->tgl_selesai, "l")."</strong>, dan mendapatkan nilai : <strong style='font-size: 16px'>".$q_nilai->nilai."</strong></div>";
+			} else {
+				$a['data'] = "<div class='alert alert-danger'>Anda telah selesai mengikuti ujian ini pada : <strong style='font-size: 16px'>".tjs($q_nilai->tgl_selesai, "l")."</strong>. Nilai akan diumumkan oleh Guru yang bersangkutan.</div>";
+			}
 		}
 		$this->load->view('aaa', $a);
 	}
