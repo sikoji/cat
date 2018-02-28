@@ -1247,65 +1247,39 @@ class Adm extends CI_Controller {
 			exit;		
 
 		} else if ($uri3 == "simpan_akhir") {
-			$p			= json_decode(file_get_contents('php://input'));
-			
-			$jumlah_soal = $p->jml_soal;
-			$jumlah_benar = 0;
-			//$jumlah_bobot = 0;
-			$update_ = "";
-			//nilai bobot 
-			$array_bobot 	= array();
-			$array_nilai	= array();
-			for ($i = 1; $i < $p->jml_soal; $i++) {
-				$_tjawab 	= "opsi_".$i;
-				$_tidsoal 	= "id_soal_".$i;
-				$jawaban_ 	= empty($p->$_tjawab) ? "" : $p->$_tjawab;
-				$_ragu 		= "rg_".$i;
+			$id_tes = abs($uri4);
 
-				$cek_jwb 	= $this->db->query("SELECT bobot, jawaban FROM m_soal WHERE id = '".$p->$_tidsoal."'")->row();
-				//untuknilai bobot
-				$bobotnya 	= $cek_jwb->bobot;
-				$array_bobot[$bobotnya] = empty($array_bobot[$bobotnya]) ? 1 : $array_bobot[$bobotnya] + 1;
+			$get_jawaban = $this->db->query("SELECT list_jawaban FROM tr_ikut_ujian WHERE id_tes = '$uri4' AND id_user = '".$a['sess_konid']."'")->row_array();
+			$pc_jawaban = explode(",", $get_jawaban['list_jawaban']);
+
+			$jumlah_benar 	= 0;
+			$jumlah_salah 	= 0;
+			$jumlah_ragu  	= 0;
+			$jumlah_soal	= sizeof($pc_jawaban);
+
+			for ($x = 0; $x < $jumlah_soal; $x++) {
+				$pc_dt = explode(":", $pc_jawaban[$x]);
+				$id_soal 	= $pc_dt[0];
+				$jawaban 	= $pc_dt[1];
+				$ragu 		= $pc_dt[2];
+
+				$cek_jwb 	= $this->db->query("SELECT bobot, jawaban FROM m_soal WHERE id = '".$id_soal."'")->row();
 				
-				$q_update_jwb = "";
-				if (($cek_jwb->jawaban == $jawaban_)) {
+				if (($cek_jwb->jawaban == $jawaban)) {
 					//jika jawaban benar 
 					$jumlah_benar++;
-					$array_nilai[$bobotnya] = empty($array_nilai[$bobotnya]) ? 1 : $array_nilai[$bobotnya] + 1;
-					$q_update_jwb = "UPDATE m_soal SET jml_benar = jml_benar + 1 WHERE id = '".$p->$_tidsoal."'";
+					$q_update_jwb = "UPDATE m_soal SET jml_benar = jml_benar + 1 WHERE id = '".$id_soal."'";
 				} else {
 					//jika jawaban salah
-					$array_nilai[$bobotnya] = empty($array_nilai[$bobotnya]) ? 0 : $array_nilai[$bobotnya] + 0;
-					$q_update_jwb = "UPDATE m_soal SET jml_salah = jml_salah + 1 WHERE id = '".$p->$_tidsoal."'";
+					$jumlah_salah++;
+					$q_update_jwb = "UPDATE m_soal SET jml_salah = jml_salah + 1 WHERE id = '".$id_soal."'";
 				}
-
 				$this->db->query($q_update_jwb);
+			}
 
-				$update_	.= "".$p->$_tidsoal.":".$jawaban_.":".$p->$_ragu.",";
-			}
-			//perhitungan nilai bobot
-			ksort($array_bobot);
-			ksort($array_nilai);
-			$nilai_bobot_benar = 0;
-			$nilai_bobot_total = 0;
-			foreach ($array_bobot as $key => $value) {
-				$nilai_bobot_benar = $nilai_bobot_benar + ($key * $array_nilai[$key]);
-				$nilai_bobot_total = $nilai_bobot_total + ($key * $array_bobot[$key]);
-			}
-			$update_		= substr($update_, 0, -1);
-			$nilai = ($jumlah_benar/($jumlah_soal-1)) * 100;
-			$nilai_bobot = ($nilai_bobot_benar/$nilai_bobot_total)*100;
-			
-			/*
-			echo var_dump($array_bobot);
-			echo var_dump($array_nilai);
-			echo "Benar bobot : ".$nilai_bobot_benar."<br>";
-			echo "Jml bobot : ".$nilai_bobot_total."<br>";
-			echo "Nilai bobot : ".$nilai_bobot."<br>";
-			//akhir perhitungan nilai bobot
-			exit;
-			*/
-			$this->db->query("UPDATE tr_ikut_ujian SET jml_benar = ".$jumlah_benar.", nilai_bobot = ".$nilai_bobot.", nilai = '".$nilai."', list_jawaban = '".$update_."', status = 'N' WHERE id_tes = '$uri4' AND id_user = '".$a['sess_konid']."'");
+			$nilai = ($jumlah_benar / $jumlah_soal)  * 100;
+
+			$this->db->query("UPDATE tr_ikut_ujian SET jml_benar = ".$jumlah_benar.", nilai = ".$nilai.", status = 'N' WHERE id_tes = '$id_tes' AND id_user = '".$a['sess_konid']."'");
 			$a['status'] = "ok";
 			j($a);
 			exit;		
