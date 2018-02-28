@@ -346,6 +346,25 @@ function m_siswa_ur(id) {
 	}
 	return false;
 }
+function aktifkan_semua_siswa() {
+	if (confirm('Anda yakin..? Username dan Password otomatis adalah NIM ..!')) {
+		$.ajax({
+			type: "GET",
+			url: base_url+"adm/m_siswa/aktifkan_semua/",
+			success: function(response) {
+				if (response.status == "ok") {
+					alert(response.caption);
+					window.location.assign(base_url+"adm/m_siswa"); 
+				} else {
+					alert(response.caption);
+				}
+			}
+		});
+	}
+	return false;
+}
+
+
 //guru
 function m_guru_e(id) {
 	$("#m_guru").modal('show');
@@ -418,6 +437,23 @@ function m_guru_ur(id) {
 			url: base_url+"adm/m_guru/user_reset/"+id,
 			success: function(response) {
 				if (response.status == "ok") {
+					window.location.assign(base_url+"adm/m_guru"); 
+				} else {
+					alert(response.caption);
+				}
+			}
+		});
+	}
+	return false;
+}
+function aktifkan_semua_guru() {
+	if (confirm('Anda yakin..? Username dan Password otomatis adalah NIP ..!')) {
+		$.ajax({
+			type: "GET",
+			url: base_url+"adm/m_guru/aktifkan_semua/",
+			success: function(response) {
+				if (response.status == "ok") {
+					alert(response.caption);
 					window.location.assign(base_url+"adm/m_guru"); 
 				} else {
 					alert(response.caption);
