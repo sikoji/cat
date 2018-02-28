@@ -1255,6 +1255,8 @@ class Adm extends CI_Controller {
 			$jumlah_benar 	= 0;
 			$jumlah_salah 	= 0;
 			$jumlah_ragu  	= 0;
+			$nilai_bobot 	= 0;
+			$total_bobot	= 0;
 			$jumlah_soal	= sizeof($pc_jawaban);
 
 			for ($x = 0; $x < $jumlah_soal; $x++) {
@@ -1264,10 +1266,12 @@ class Adm extends CI_Controller {
 				$ragu 		= $pc_dt[2];
 
 				$cek_jwb 	= $this->db->query("SELECT bobot, jawaban FROM m_soal WHERE id = '".$id_soal."'")->row();
+				$total_bobot = $total_bobot + $cek_jwb->bobot;
 				
 				if (($cek_jwb->jawaban == $jawaban)) {
 					//jika jawaban benar 
 					$jumlah_benar++;
+					$nilai_bobot = $nilai_bobot + $cek_jwb->bobot;
 					$q_update_jwb = "UPDATE m_soal SET jml_benar = jml_benar + 1 WHERE id = '".$id_soal."'";
 				} else {
 					//jika jawaban salah
@@ -1278,8 +1282,9 @@ class Adm extends CI_Controller {
 			}
 
 			$nilai = ($jumlah_benar / $jumlah_soal)  * 100;
+			$nilai_bobot = ($nilai_bobot / $total_bobot)  * 100;
 
-			$this->db->query("UPDATE tr_ikut_ujian SET jml_benar = ".$jumlah_benar.", nilai = ".$nilai.", status = 'N' WHERE id_tes = '$id_tes' AND id_user = '".$a['sess_konid']."'");
+			$this->db->query("UPDATE tr_ikut_ujian SET jml_benar = ".$jumlah_benar.", nilai = ".$nilai.", nilai_bobot = ".$nilai_bobot.", status = 'N' WHERE id_tes = '$id_tes' AND id_user = '".$a['sess_konid']."'");
 			$a['status'] = "ok";
 			j($a);
 			exit;		
