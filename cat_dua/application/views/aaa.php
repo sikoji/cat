@@ -81,7 +81,7 @@ var base_url = "<?php echo base_url(); ?>";
 var editor_style = "<?php echo $this->config->item('editor_style'); ?>";
 var uri_js = "<?php echo $this->config->item('uri_js'); ?>";
 </script>
-<script src="<?php echo base_url(); ?>___/js/aplikasi.js"></script> 
+<script src="<?php echo base_url(); ?>___/js/aplikasi.js?time=<?php echo time(); ?>"></script> 
 
 
 </body>
