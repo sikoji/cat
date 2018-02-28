@@ -8,6 +8,7 @@
       </div>
     </div>
     <div class="panel-body">
+      <a href="#" onclick="return aktifkan_semua_siswa();" class="btn btn-info" style="margin-bottom: 10px"><i class="fa fa-users"></i> Aktifkan semua siswa</a>
       <table class="table table-bordered" id="datatabel">
         <thead>
           <tr>
