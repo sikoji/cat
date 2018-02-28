@@ -905,25 +905,48 @@ class Adm extends CI_Controller {
 		} else if ($uri3 == "simpan") {
 			$ket 	= "";
 
-			if ($p->id != 0) {
-				$this->db->query("UPDATE tr_guru_tes SET id_mapel = '".bersih($p,"mapel")."', 
-								nama_ujian = '".bersih($p,"nama_ujian")."', jumlah_soal = '".bersih($p,"jumlah_soal")."', 
-								waktu = '".bersih($p,"waktu")."', 
-								terlambat = '".bersih($p,"terlambat")." ".bersih($p,"terlambat2")."', 
-								tgl_mulai = '".bersih($p,"tgl_mulai")." ".bersih($p,"wkt_mulai")."', jenis = '".bersih($p,"acak")."'
-								WHERE id = '".bersih($p,"id")."'");
-				$ket = "edit";
-			} else {
-				$ket = "tambah";
-				$token = strtoupper(random_string('alpha', 5));
+			$ambil_data = $this->db->query("SELECT id FROM m_soal WHERE id_mapel = '".bersih($p, "mapel")."' AND id_guru = '".$a['sess_konid']."'")->num_rows();
 
-				$this->db->query("INSERT INTO tr_guru_tes VALUES (null, '".$a['sess_konid']."', '".bersih($p,"mapel")."',
-								'".bersih($p,"nama_ujian")."', '".bersih($p,"jumlah_soal")."', '".bersih($p,"waktu")."', '".bersih($p,"acak")."', 
-								'', '".bersih($p,"tgl_mulai")." ".bersih($p,"wkt_mulai")."', '".bersih($p,"terlambat")." ".bersih($p,"terlambat2")."', '$token')");
-			}
+
+			$jml_soal_diminta = intval(bersih($p, "jumlah_soal"));
 			
-			$ret_arr['status'] 	= "ok";
-			$ret_arr['caption']	= $ket." sukses";
+			if ($ambil_data < $jml_soal_diminta) {
+				$ret_arr['status'] 	= "gagal";
+				$ret_arr['caption']	= "Jumlah soal diinput, melebihi jumlah soal yang ada: ".$ambil_data;
+			} else {
+				if ($p->id != 0) {
+					$this->db->query("UPDATE tr_guru_tes SET 
+						id_mapel = '".bersih($p,"mapel")."', 
+						nama_ujian = '".bersih($p,"nama_ujian")."', 
+						jumlah_soal = '".bersih($p,"jumlah_soal")."', 
+						waktu = '".bersih($p,"waktu")."', 
+						terlambat = '".bersih($p,"terlambat")." ".bersih($p,"terlambat2")."', 
+						tgl_mulai = '".bersih($p,"tgl_mulai")." ".bersih($p,"wkt_mulai")."', 
+						jenis = '".bersih($p,"acak")."'
+						WHERE id = '".bersih($p,"id")."'");
+					$ket = "edit";
+				} else {
+					$ket = "tambah";
+					$token = strtoupper(random_string('alpha', 5));
+
+					$this->db->query("INSERT INTO tr_guru_tes VALUES (
+						null, 
+						'".$a['sess_konid']."', 
+						'".bersih($p,"mapel")."',
+						'".bersih($p,"nama_ujian")."', 
+						'".bersih($p,"jumlah_soal")."', 
+						'".bersih($p,"waktu")."', 
+						'".bersih($p,"acak")."', 
+						'', 
+						'".bersih($p,"tgl_mulai")." ".bersih($p,"wkt_mulai")."', 
+						'".bersih($p,"terlambat")." ".bersih($p,"terlambat2")."', 
+						'$token')");
+				}
+
+
+				$ret_arr['status'] 	= "ok";
+				$ret_arr['caption']	= $ket." sukses";
+			}
 			j($ret_arr);
 			exit();
 		} else if ($uri3 == "hapus") {
@@ -932,11 +955,6 @@ class Adm extends CI_Controller {
 			$ret_arr['caption']	= "hapus sukses";
 			j($ret_arr);
 			exit();
-		} else if ($uri3 == "jumlah_soal") {
-			$ambil_data = $this->db->query("SELECT id FROM m_soal WHERE id_mapel = '$uri4' AND id_guru = '".$a['sess_konid']."'")->num_rows();
-			$ret_arr['jumlah'] = $ambil_data;
-			j($ret_arr);
-			exit();			
 		} else if ($uri3 == "data") {
 				$start = $this->input->post('start');
 		        $length = $this->input->post('length');
