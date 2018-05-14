@@ -1309,7 +1309,13 @@ class Adm extends CI_Controller {
 		} else if ($uri3 == "token") {
 			$a['du'] = $this->db->query("SELECT a.id, a.tgl_mulai, a.terlambat, 
 										a.token, a.nama_ujian, a.jumlah_soal, a.waktu,
-										b.nama nmguru, c.nama nmmapel FROM tr_guru_tes a 
+										b.nama nmguru, c.nama nmmapel,
+										(case
+											when (now() < a.tgl_mulai) then 0
+											when (now() >= a.tgl_mulai and now() <= a.terlambat) then 1
+											else 2
+										end) statuse
+										FROM tr_guru_tes a 
 										INNER JOIN m_guru b ON a.id_guru = b.id
 										INNER JOIN m_mapel c ON a.id_mapel = c.id 
 										WHERE a.id = '$uri4'")->row_array();
