@@ -8,6 +8,7 @@
       <input type="hidden" name="_tgl_sekarang" id="_tgl_sekarang" value="<?php echo date('Y-m-d H:i:s'); ?>">
       <input type="hidden" name="_tgl_mulai" id="_tgl_mulai" value="<?php echo $tgl_mulai; ?>">
       <input type="hidden" name="_terlambat" id="_terlambat" value="<?php echo $terlambat; ?>">
+      <input type="hidden" name="_statuse" id="_statuse" value="<?php echo $statuse; ?>">
       <div class="col-md-7">
         <div class="panel panel-default">
           <div class="panel-body">
@@ -31,10 +32,11 @@
               Waktu boleh mengerjakan ujian adalah saat tombol "MULAI" berwarna hijau..!
             </div>
 
-            <div id="btn_mulai"></div>
+            <div id="btn_mulai">Ujian akan mulai dalam <div id="akan_mulai"></div></div>
 
             <div class="btn btn-danger" id="waktu_" style="margin-top: 20px">
-              Sisa waktu mengikuti ujian : <span id="waktu_akhir_ujian"></span>
+              Sisa waktu mengikuti ujian <br>
+              <span id="waktu_akhir_ujian"></span>
             </div>
 
             <div id="waktu_game_over"></div>
