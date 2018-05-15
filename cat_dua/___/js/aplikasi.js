@@ -224,23 +224,19 @@ function m_ujian_e(id) {
 function m_ujian_s() {
 	var f_asal	= $("#f_ujian");
 	var form	= getFormData(f_asal);
-	if (form.jumlah_soal > form.jumlah_soal1) {
-		alert('Jumlah soal pada mata pelajaran ini belum mencukupi..!');
-	} else {
-		$.ajax({		
-			type: "POST",
-			url: base_url+"adm/m_ujian/simpan",
-			data: JSON.stringify(form),
-			dataType: 'json',
-			contentType: 'application/json; charset=utf-8'
-		}).done(function(response) {
-			if (response.status == "ok") {
-				window.location.assign(base_url+"adm/m_ujian"); 
-			} else {
-				console.log('gagal');
-			}
-		});
-	}
+	$.ajax({		
+		type: "POST",
+		url: base_url+"adm/m_ujian/simpan",
+		data: JSON.stringify(form),
+		dataType: 'json',
+		contentType: 'application/json; charset=utf-8'
+	}).done(function(response) {
+		if (response.status == "ok") {
+			window.location.assign(base_url+"adm/m_ujian"); 
+		} else {
+			console.log('gagal');
+		}
+	});
 	return false;
 }
 function m_ujian_h(id) {
