@@ -8,7 +8,7 @@
       <input type="hidden" name="_tgl_sekarang" id="_tgl_sekarang" value="<?php echo date('Y-m-d H:i:s'); ?>">
       <input type="hidden" name="_tgl_mulai" id="_tgl_mulai" value="<?php echo $tgl_mulai; ?>">
       <input type="hidden" name="_terlambat" id="_terlambat" value="<?php echo $terlambat; ?>">
-      <input type="hidden" name="_statuse" id="_statuse" value="<?php echo $statuse; ?>">
+      <input type="hidden" name="_statuse" id="_statuse" value="<?php echo $du['statuse']; ?>">
       <div class="col-md-7">
         <div class="panel panel-default">
           <div class="panel-body">
