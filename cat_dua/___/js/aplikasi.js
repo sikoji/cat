@@ -324,19 +324,20 @@ function m_siswa_h(id) {
 	return false;
 }
 function m_siswa_u(id) {
-	if (confirm('Anda yakin..? Username dan Password otomatis adalah NIM ..!')) {
+	// if (confirm('Anda yakin..? Username dan Password otomatis adalah NIM ..!')) {
 		$.ajax({
 			type: "GET",
 			url: base_url+"adm/m_siswa/user/"+id,
 			success: function(response) {
 				if (response.status == "ok") {
-					window.location.assign(base_url+"adm/m_siswa"); 
+					// window.location.assign(base_url+"adm/m_siswa"); 
+					console.log("ok");
 				} else {
 					alert(response.caption);
 				}
 			}
 		});
-	}
+	// }
 	return false;
 }
 function m_siswa_ur(id) {
